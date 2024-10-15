@@ -4,22 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 namespace BackEndProject.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class ErrorController : Controller
+    public class ErrorController : ControllerBase
     {
         [Route("/error")]
         public IActionResult HandleError() =>
             Problem();
 
         [Route("/error-development")]
-        public IActionResult HandleErrorDevelopment([FromServices] IHostEnvironment hostEnvironment)
+        public IActionResult HandleErrorDevelopment(
+        [FromServices] IHostEnvironment hostEnvironment)
         {
-            if (hostEnvironment.IsDevelopment())
+            if(!hostEnvironment.IsDevelopment())
             {
                 return NotFound();
             }
 
             var exceptionHandlerFeature =
-                HttpContext.Features.Get<IExceptionHandlerFeature>();
+                HttpContext.Features.Get<IExceptionHandlerFeature>()!;
 
             return Problem(
                 detail: exceptionHandlerFeature.Error.StackTrace,

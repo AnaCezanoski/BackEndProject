@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BackEndProject.Domain.Model;
+using BackEndProject.Domain.Model.Users;
 using BackEndProject.Application.Services;
 
 namespace BackEndProject.Controllers
 {
     [ApiController]
-    [Route("api/v1/auth")]
+    [Route("api/auth")]
     public class AuthController : Controller
     {
         [HttpPost]
-        public IActionResult Auth(string email, string password)
+        public IActionResult Auth(string name, string email, string password)
         {
-            if(email == "ana@email.com" && password == "ana9321")
+            if(name == "Ana" && email == "ana@email.com" && password == "ana9321")
             {
-                var token = TokenService.GenerateToken(new User());
+                var user = new User(name, email, password);
+                var token = TokenService.GenerateToken(user);
                 return Ok(token);
             }
-            return BadRequest("Email or password invalid!");
+            return BadRequest("Name, email or password invalid!");
         }
     }
 }

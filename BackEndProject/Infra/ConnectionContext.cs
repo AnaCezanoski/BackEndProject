@@ -1,4 +1,5 @@
-﻿using BackEndProject.Domain.Model;
+﻿using BackEndProject.Domain.Model.Roles;
+using BackEndProject.Domain.Model.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackEndProject.Infra
@@ -6,6 +7,8 @@ namespace BackEndProject.Infra
     public class ConnectionContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

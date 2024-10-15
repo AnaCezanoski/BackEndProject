@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BackEndProject.Domain.Model;
+using BackEndProject.Domain.Model.Users;
 
 namespace BackEndProject.Application.Services
 {

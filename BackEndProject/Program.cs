@@ -1,5 +1,4 @@
 using BackEndProject;
-using BackEndProject.Domain.Model;
 using BackEndProject.Infra.Repositories;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,12 +7,17 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using AutoMapper;
+using BackEndProject.Domain.Model.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+//builder.Services.AddAutoMapper(typeof(DomainToDTOMapping));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -48,6 +52,17 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Policy",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:8080", "https://localhost:8080")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
+
 var jwt = Encoding.ASCII.GetBytes(Jwt.Secret);
 
 builder.Services.AddAuthentication(x =>
@@ -81,6 +96,8 @@ else
 {
     app.UseExceptionHandler("/error");
 }
+
+app.UseCors("Policy");
 
 app.UseHttpsRedirection();
 
